@@ -146,8 +146,7 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
         "pageId": pageId
     }
     sign_dic = get_sign_dic(sign_server, pre_sign_data)
-    # sign_str = '{"msg":"ok","result":{"x-sign":"azYBCM002xAAG4PADnTObnvzv9jA6wPLjyVvvmRVTOLbCHd+JI8wbM3TQJynij5X7tEaCud/h6DAsUfP0/LHjFH8UlrxywPLgcsDy4","wua":"","x-mini-wua":"HHnB_td7uVBgntV8Z5zM0ljttKj244lTHLwiljigJol9kLWCIr+uo2lJeAPMyqmL3flToDqNaRdps6dBI+l6+FIrsmpFb/GPjwIJtCOv/7AG46S2lB+YAa1w/dSZDW4b82GfG","x-sgext":"923","x-umt":"GgVLZTBLOuPWfTVySmFnc8JlZ2c6li+C"},"status":0}'
-    # sign_dic = json.loads(sign_str)
+    print(sign_dic)
     body = "data=" + quote_plus(data)
     req_url = "https://acs.m.taobao.com/gw/{0}/{1}/".format(api, v)
 
@@ -198,19 +197,19 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
     if use_cookie:
         headers["Cookie"] = Cookie
 
-    print("开始请求:" + api)
-    print("请求淘宝Http头:")
-    for key in headers.keys():
-        print(key + ":" + headers[key])
+    # print("开始请求:" + api)
+    # print("请求淘宝Http头:")
+    # for key in headers.keys():
+    #     print(key + ":" + headers[key])
     proxie = {  # 'http': '113.66.181.205:25075',
         'http': 'http://117.26.192.168:47608'
     }
     if method == 'GET':
-        print("请求淘宝Http方式: GET")
+        # print("请求淘宝Http方式: GET")
         req_url = (req_url + "?{0}").format(body)
-        print("请求淘宝url:" + req_url)
+        # print("请求淘宝url:" + req_url)
         # ,proxies=proxie
-        sign_dic = requests.get(req_url, headers=headers, proxies=proxie, verify=False)
+        sign_dic = requests.get(req_url, headers=headers, verify=False)
 
     else:
         print("请求淘宝Http方式: POST")
@@ -222,7 +221,6 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
     if sign_dic.status_code == requests.codes.ok:
 
         print("淘宝返回:" + sign_dic.text)
-        print("\n")
         return sign_dic.text
     else:
         print("淘宝失败返回代码:" + str(sign_dic.status_code))
@@ -234,10 +232,10 @@ def get_sign_dic(sign_server, payload):
     headers = {
         "content-type": "application/json;charset=utf-8"
     }
-    print("待签名参数:" + json.dumps(payload))
+    # print("待签名参数:" + json.dumps(payload))
     res = requests.post(sign_server, data=json.dumps(payload), headers=headers)
     res_content = res.content
-    print("签名返回:" + str(res_content))
+    # print("签名返回:" + str(res_content))
     sign_dic = {}
     if res.status_code == requests.codes.ok:
         sign_dic = json.loads(res_content.decode())
@@ -305,11 +303,12 @@ def shuapv2(sign_server, uid, sid, utdid, deviceId, cookie_str, topic):
     timestamp = int(time.time() * 1000)
     data = r'{"appKey":"21646297","ext":"1598492811764","from":"hu3357055","id":"1006665907","namespace":1,"role":2,"sdkVersion":"0.3.0","tag":"tb","timestamp":1598492811764,"topic":"%s","utdId":"%s"}' % (
         topic, utdid)
-    print(data)
+    # print(data)
     v = "1.0"
     api = "mtop.taobao.powermsg.msg.subscribe"
     call_gw_api(sign_server, api, v, data, utdid=utdid, deviceId=deviceId, use_cookie=False, Cookie=cookie_str,
                 method='GET')
+
 
 # 刷观看（不可行）
 def unsubscribe(sign_server, uid, sid, utdid, deviceId, cookie_str, topic, timestamp, timestamp2):
@@ -1455,4 +1454,8 @@ if __name__ == '__main__':
 
     utdid = 'XsedXr/tux4DAJO0f4LI5rtp'
     deviceId = 'AuuhpePts38Ge8uc6EHhX1ERxa8vGUK7CPGVYDrXFuj0'
-    get_sign_dic(sign_server, payload={'username': 'dayin'})
+    # get_sign_dic(sign_server, payload={'username': 'dayin'})
+    cookie_str = ''
+    topic = "99b76cdf-d7b2-4aa8-9b25-27793d1af180"
+    while True:
+        shuapv2(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)

@@ -3,9 +3,8 @@ import threading
 
 
 def main():
-    topic = "cc383b36-d4c0-4118-b81e-c38db787a18a"
-    cookie = ''
-    jobs = [threading.Thread(target=brush_pv_root, args=(SIGN_SERVER, UTD_ID, DEVICE_ID, cookie, topic)) for i
+    topic = "99b76cdf-d7b2-4aa8-9b25-27793d1af180"
+    jobs = [threading.Thread(target=brush_pv_root, args=(topic,)) for i
             in range(100)]
 
     for i in jobs:
