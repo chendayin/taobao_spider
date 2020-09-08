@@ -14,8 +14,8 @@ import re
 import datetime
 
 appKey = "21646297"
-ttid = '700226%40taobao_android_9.3.0'
-app_ver = "9.3.0"
+ttid = '1552981757354%40taobao_android_9.11.0'
+app_ver = "9.11.0"
 ua = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
 lat = ""
 lng = ""
@@ -124,11 +124,11 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
     t = int(timestamp)
     UA = user_agent()
     if method == 'GET':
-        pageId = ' http%3A%2F%2Fh5.m.taobao.com%2Ftaolive%2Fvideo.html'
-        pageName = 'com.taobao.tao.sku.view.MainSkuActivity'
+        pageId = 'http%3A%2F%2Fh5.m.taobao.com%2Fawp%2Fbase%2Fcart.htm'
+        pageName = 'com.taobao.android.trade.cart.CartActivity'
     else:
-        pageId = 'http%3A%2F%2Fs.m.taobao.com%2Fh5'
-        pageName = 'com.taobao.search.sf.MainSearchResultActivity'
+        pageId = 'http%3A%2F%2Fh5.m.taobao.com%2Fawp%2Fbase%2Fcart.htm'
+        pageName = 'com.taobao.android.trade.cart.CartActivity'
     pre_sign_data = {
         "uid": uid,
         "ttid": ttid,
@@ -146,21 +146,22 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
         "pageId": pageId
     }
     sign_dic = get_sign_dic(sign_server, pre_sign_data)
-    print(sign_dic)
+    # sign_str = '{"msg":"ok","result":{"x-sign":"azYBCM002xAAG4PADnTObnvzv9jA6wPLjyVvvmRVTOLbCHd+JI8wbM3TQJynij5X7tEaCud/h6DAsUfP0/LHjFH8UlrxywPLgcsDy4","wua":"","x-mini-wua":"HHnB_td7uVBgntV8Z5zM0ljttKj244lTHLwiljigJol9kLWCIr+uo2lJeAPMyqmL3flToDqNaRdps6dBI+l6+FIrsmpFb/GPjwIJtCOv/7AG46S2lB+YAa1w/dSZDW4b82GfG","x-sgext":"923","x-umt":"GgVLZTBLOuPWfTVySmFnc8JlZ2c6li+C"},"status":0}'
+    # sign_dic = json.loads(sign_str)
     body = "data=" + quote_plus(data)
-    req_url = "https://acs.m.taobao.com/gw/{0}/{1}/".format(api, v)
+    req_url = "https://trade-acs.m.taobao.com/gw/{0}/{1}/".format(api, v)
 
     # t = 1590387584
     headers = {
         "x-m-biz-live-bizcode": "TAOBAO",
         "x-features": features,
         "x-sgext": sign_dic['result']['x-sgext'],
-        "c-launch-info": "0,0,1588652065055,1588651952000,3",
+        "c-launch-info": "3,0,1598960097410,1598960031712,3",
         "x-page-name": pageName,
-        "User-Agent": "MTOPSDK%2F3.1.1.7+%28Android%3B6.0.1%3BSamsung%3BGalaxy+S8%29",
+        "User-Agent": ua,
         "x-ttid": quote_plus(ttid),
         "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
-        "a-orange-q": "appKey=21646297&appVersion=9.6.1&clientAppIndexVersion=1120200504231704166&clientVersionIndexVersion=0",
+        "a-orange-q": "appKey=21646297&appVersion=9.11.0&clientAppIndexVersion=1120200902142100567&clientVersionIndexVersion=0",
         # "Content-Length": "343",
         "x-region-channel": "CN",
         "x-appkey": appKey,
@@ -168,10 +169,10 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
         "x-mini-wua": quote_plus(sign_dic['result']['x-mini-wua']),
 
         "x-c-traceid": "XpF17gMK9P0DAM5H9D8NAKDU15886444930540109121941",
-        "x-SLIDER-Q": "appKey%3D21646297%26ver%3D1588443286014",
-        "x-app-conf-v": str(19),
+        "x-SLIDER-Q": "appKey%3D21646297%26ver%3D1599027316342",
+        "x-app-conf-v": str(9),
         "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
-        "x-bx-version": "6.4.16",
+        "x-bx-version": "6.5.7",
         "x-pv": "6.3",
         "x-t": str(t),
         "x-app-ver": app_ver,
@@ -185,7 +186,7 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
 
         "x-page-url": quote_plus(pageId),
         "x-location": quote_plus("{0},{1}".format(lng, lat)),
-        "Host": "acs.m.taobao.com"
+        "Host": "trade-acs.m.taobao.com"
         # "Accept-Encoding": "gzip",
         # "Connection": "Keep-Alive",
     }
@@ -197,19 +198,19 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
     if use_cookie:
         headers["Cookie"] = Cookie
 
-    # print("开始请求:" + api)
-    # print("请求淘宝Http头:")
-    # for key in headers.keys():
-    #     print(key + ":" + headers[key])
+    print("开始请求:" + api)
+    print("请求淘宝Http头:")
+    for key in headers.keys():
+        print(key + ":" + headers[key])
     proxie = {  # 'http': '113.66.181.205:25075',
         'http': 'http://117.26.192.168:47608'
     }
     if method == 'GET':
-        # print("请求淘宝Http方式: GET")
+        print("请求淘宝Http方式: GET")
         req_url = (req_url + "?{0}").format(body)
-        # print("请求淘宝url:" + req_url)
+        print("请求淘宝url:" + req_url)
         # ,proxies=proxie
-        sign_dic = requests.get(req_url, headers=headers, verify=False)
+        sign_dic = requests.get(req_url, headers=headers, proxies=proxie, verify=False)
 
     else:
         print("请求淘宝Http方式: POST")
@@ -221,6 +222,7 @@ def call_gw_api(sign_server, api, v, data, pageId='', pageName='', use_cookie=Fa
     if sign_dic.status_code == requests.codes.ok:
 
         print("淘宝返回:" + sign_dic.text)
+        print("\n")
         return sign_dic.text
     else:
         print("淘宝失败返回代码:" + str(sign_dic.status_code))
@@ -232,10 +234,10 @@ def get_sign_dic(sign_server, payload):
     headers = {
         "content-type": "application/json;charset=utf-8"
     }
-    # print("待签名参数:" + json.dumps(payload))
+    print("待签名参数:" + json.dumps(payload))
     res = requests.post(sign_server, data=json.dumps(payload), headers=headers)
     res_content = res.content
-    # print("签名返回:" + str(res_content))
+    print("签名返回:" + str(res_content))
     sign_dic = {}
     if res.status_code == requests.codes.ok:
         sign_dic = json.loads(res_content.decode())
@@ -270,11 +272,22 @@ def live_searchv3(sign_server, q, uid, sid, utdid, deviceId, cookie_str):
 #     api = "mtop.mediaplatform.lightlive.videolist"
 #     call_gw_api(sign_server, api, v, data, utdid=utdid, deviceId=deviceId)
 
-
+# 获取频道下的主播
 def videolist(sign_server, uid, sid, utdid, deviceId, cookie_str):
     data = "{\"queryAd\":\"1\",\"s\":\"0\",\"channelId\":\"29\",\"n\":\"10\",\"deviceLevel\":\"3\",\"version\":\"12\",\"moduleIndex\":\"0\",\"PARCELABLE_WRITE_RETURN_VALUE\":\"1\",\"CREATOR\":\"{}\",\"CONTENTS_FILE_DESCRIPTOR\":\"1\",\"haveOnlook\":\"false\"}"
     v = "5.0"
     api = "mtop.mediaplatform.live.videolist"
+    pageName = "com.taobao.taolivehome.TaoLiveHomepageActivity"
+    pageId = "http://h5.m.taobao.com/taolive/main.html"
+    call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
+                pageId=pageId, Cookie=cookie_str, use_cookie=True, method='GET')
+
+
+# 获取标签下的主播
+def depth(sign_server, uid, sid, utdid, deviceId, cookie_str):
+    data = r'{"feedId":"","n":"10","s":"10","tagId":"column_664","version":"8"}'
+    v = "1.0"
+    api = "mtop.mediaplatform.live.depth"
     pageName = "com.taobao.taolivehome.TaoLiveHomepageActivity"
     pageId = "http://h5.m.taobao.com/taolive/main.html"
     call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
@@ -301,13 +314,20 @@ def shuapv(sign_server, utdid, deviceId, accountId, accountName, timestamp):
 # 刷观看
 def shuapv2(sign_server, uid, sid, utdid, deviceId, cookie_str, topic):
     timestamp = int(time.time() * 1000)
+    # print(timestamp)
+    # data ='{"appKey":"21646297","ext":"%s","from":"勾玉楠","id":"1003957259","namespace":1,"role":5,"sdkVersion":"0.3.0","tag":"tb","timestamp":%s,"topic":"%s","utdId":"XpF17gMK9P0DAM5H9D8NAKDU"}'%(timestamp,timestamp,topic)
+    # data = r'{"appKey":"21646297","tag":"tb","sdkVersion":"0.3.0","namespace":1,"id":"","role":3,"timestamp":%s,"topic":"86382a08-6ee0-4206-91c0-96f45d3219f8","utdId":"XpF17gMK9P0DAM5H9D8NAKDU","from":"","ext":"%s"}'%(timestamp,timestamp)
     data = r'{"appKey":"21646297","ext":"1598492811764","from":"hu3357055","id":"1006665907","namespace":1,"role":2,"sdkVersion":"0.3.0","tag":"tb","timestamp":1598492811764,"topic":"%s","utdId":"%s"}' % (
         topic, utdid)
-    # print(data)
+    # data = r'{"appKey":"21646297","ext":"1598440436007","from":"hu3357055","id":"1006665907","namespace":1,"role":3,"sdkVersion":"0.3.0","tag":"tb","timestamp":1598440436007,"topic":"57370a7a-305c-4b6f-aeb1-776cb8233cad","utdId":"Xz4kYRos5H4DAKkeoL+6HwYQ"} '
+    # data = r'{"appKey":"21646297","ext":"1598492811764","from":"hu3357055","id":"1006665907","namespace":1,"role":3,"sdkVersion":"0.3.0","tag":"tb","timestamp":1598492811764,"topic":"7ffbadd4-03b0-4b6f-9126-df58f8f4309b","utdId":"Xz4kYRos5H4DAKkeoL+6HwYQ"}'
+    print(data)
     v = "1.0"
     api = "mtop.taobao.powermsg.msg.subscribe"
     call_gw_api(sign_server, api, v, data, utdid=utdid, deviceId=deviceId, use_cookie=False, Cookie=cookie_str,
                 method='GET')
+
+    # unsubscribe(sign_server, uid, sid, utdid, deviceId, cookie_str,topic,timestamp,timestamp2)
 
 
 # 刷观看（不可行）
@@ -335,21 +355,21 @@ def video_subscribe(sign_server, utdid, deviceId, sid):
     call_gw_api(sign_server, api, v, data, sid=sid, utdid=utdid, deviceId=deviceId, use_cookie=False, method='GET')
 
 
-# def test_jinlai(sign_server, utdid, deviceId, cookie_str, sid):
-#     timestamp = time.time()
-#     data = r'{"bizCode":1,"bizTag":"tb","offset":0,"pagesize":8,"role":5,"sdkversion":"0.3.0","timestamp":1587733510394,"topic":"68087f57-5961-445d-8732-60cd856c6940"}'
-#     v = "1.0"
-#     api = "mtop.taobao.powermsg.msg.pullnativemsg"
-#     call_gw_api(sign_server, api, v, data, utdid=utdid, sid=sid, deviceId=deviceId, Cookie=cookie_str, use_cookie=True)
+def test_jinlai(sign_server, utdid, deviceId, cookie_str, sid):
+    timestamp = time.time()
+    data = r'{"bizCode":1,"bizTag":"tb","offset":0,"pagesize":8,"role":5,"sdkversion":"0.3.0","timestamp":1587733510394,"topic":"68087f57-5961-445d-8732-60cd856c6940"}'
+    v = "1.0"
+    api = "mtop.taobao.powermsg.msg.pullnativemsg"
+    call_gw_api(sign_server, api, v, data, utdid=utdid, sid=sid, deviceId=deviceId, Cookie=cookie_str, use_cookie=True)
 
 
-# def test_enter(sign_server, utdid, deviceId, cookie_str, sid, uid):
-#     timestamp = time.time()
-#     data = r'{"action":"enter","params":"","scopeId":"970","subScope":"1612710529_1_277380438972","trackParams":"{\"activityId\":\"277380438972\",\"broadcasterId\":\"1612710529\",\"userId\":\"1006665907\"}"}'
-#     v = "1.0"
-#     api = "mtop.taobao.iliad.task.action"
-#     call_gw_api(sign_server, api, v, data, utdid=utdid, sid=sid, uid=uid, deviceId=deviceId, use_cookie=True,
-#                 Cookie=cookie_str, method='GET')
+def test_enter(sign_server, utdid, deviceId, cookie_str, sid, uid):
+    timestamp = time.time()
+    data = r'{"action":"enter","params":"","scopeId":"970","subScope":"1612710529_1_277380438972","trackParams":"{\"activityId\":\"277380438972\",\"broadcasterId\":\"1612710529\",\"userId\":\"1006665907\"}"}'
+    v = "1.0"
+    api = "mtop.taobao.iliad.task.action"
+    call_gw_api(sign_server, api, v, data, utdid=utdid, sid=sid, uid=uid, deviceId=deviceId, use_cookie=True,
+                Cookie=cookie_str, method='GET')
 
 
 def senditemmessage(sign_server, uid, sid, utdid, deviceId, cookie_str):
@@ -434,13 +454,14 @@ def get_shop_data(shopid, sellerid, sign_server, uid, sid, utdid, deviceId, cook
 
 
 def get_detail(sign_server, uid, sid, utdid, deviceId, cookie_str):
-    data = r'{"detail_v":"3.3.2","exParams":"{\"__application_id__\":\"taobaolive\",\"appReqFrom\":\"detail\",\"bizType\":\"taolive\",\"container_type\":\"xdetail\",\"cpuCore\":\"4\",\"cpuMaxHz\":\"1608000\",\"descVersion\":\"7.0\",\"dinamic_v3\":\"true\",\"id\":\"579956116482\",\"item_id\":\"579956116482\",\"latitude\":\"0\",\"liveInfo\":\"1612710529~262182342155\",\"longitude\":\"0\",\"nick\":\"苦涩终\",\"osVersion\":\"23\",\"pg1stepk\":\"ucm:262182342155_1612710529\",\"phoneType\":\"Mix\",\"scm\":\"1007.13381.38597.101200300000000\",\"soVersion\":\"2.0\",\"spm\":\"a2141.8001249\",\"spm-cnt\":\"a2141.7631564\",\"ultron2\":\"true\",\"utdid\":\"XpF17gMK9P0DAM5H9D8NAKDU\",\"utparam\":\"{\\\"_tbk\\\":\\\"1\\\"}\"}","itemNumId":"579956116482"} '
+    nowtime = str(int(time.time() * 1000))
+    data = r'{"detail_v":"1.0.0","exParams":"{\"NAV_START_ACTIVITY_TIME\":\"1598965536189\",\"NAV_TO_URL_START_TIME\":\"1598965536164\",\"WEEX_NAV_PROCESSOR_TIME\":\"1598965536170\",\"action\":\"ipv\",\"ad_type\":\"1.0\",\"appReqFrom\":\"detail\",\"clientCachedTemplateKeys\":\"[{\\\"id\\\":\\\"1538383035450\\\",\\\"version\\\":\\\"121\\\"},{\\\"id\\\":\\\"1558768549860\\\",\\\"version\\\":\\\"42\\\"}]\",\"container_type\":\"xdetail\",\"countryCode\":\"CN\",\"cpuCore\":\"6\",\"cpuMaxHz\":\"1416000\",\"detailAlgoParam\":\"%E5%B0%8F%E7%99%BD%E9%9E%8B\",\"dinamic_v3\":\"true\",\"from\":\"search\",\"id\":\"625216059225\",\"item_id\":\"625216059225\",\"latitude\":\"0\",\"list_type\":\"search\",\"longitude\":\"0\","nick\":\"苦涩终\",\"osVersion\":\"23\",\"phoneType\":\"N7 Pro\",\"search_action\":\"initiative\",\"soVersion\":\"2.0\",\"spm\":\"a2141.7631557.itemlist.1\",\"spm-cnt\":\"a2141.7631564\",\"supportV7\":\"true\",\"ultron2\":\"true\",\"utdid\":\"' + utdid + r'\"}","itemNumId":"625216059225"} '
     v = "6.0"
     api = "mtop.taobao.detail.getdetail"
     pageName = ""
     pageId = ""
-    call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
-                pageId=pageId, Cookie=cookie_str, use_cookie=True, method='GET')
+    call_gw_api(sign_server, api, v, data, utdid=utdid, deviceId=deviceId, pageName=pageName, pageId=pageId,
+                Cookie=cookie_str, use_cookie=True, method='GET')
 
 
 def get_detail2(sign_server, uid, sid, utdid, deviceId, cookie_str):
@@ -815,20 +836,20 @@ def comment_publish2(sign_server, uid, sid, utdid, deviceId, cookie_str, topic):
                 pageId=pageId, Cookie=cookie_str, use_cookie=False, method='GET')
 
 
-#
-# def test_follow(sign_server, utdid, deviceId, cookie_str, sid):
-#     timestamp = time.time()
-#     data = r'{"scopeId":"970","subScope":"1612710529_1_274506627780","action":"follow","params":"{\"accountId\":\"1612710529\"}","trackParams":"{\"activityId\":\"274506627780\",\"broadcasterId\":\"1612710529\",\"userId\":\"90434288\"}"}'
-#
-#     v = "1.0"
-#     api = "mtop.taobao.iliad.task.action"
-#     pageName = ""
-#     pageId = ""
-#
-#     call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
-#                 pageId=pageId, Cookie=cookie_str, use_cookie=True, method='GET')
-#
+def test_follow(sign_server, utdid, deviceId, cookie_str, sid):
+    timestamp = time.time()
+    data = r'{"scopeId":"970","subScope":"1612710529_1_274506627780","action":"follow","params":"{\"accountId\":\"1612710529\"}","trackParams":"{\"activityId\":\"274506627780\",\"broadcasterId\":\"1612710529\",\"userId\":\"90434288\"}"}'
 
+    v = "1.0"
+    api = "mtop.taobao.iliad.task.action"
+    pageName = ""
+    pageId = ""
+
+    call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
+                pageId=pageId, Cookie=cookie_str, use_cookie=True, method='GET')
+
+
+# 修改昵称
 def change_user(sign_server, uid, sid, utdid, deviceId, cookie_str):
     nowtime = int(time.time()) * 1000
     data = r'{"force":"false","gender":"0","snsNick":"思恋需要时间88888"}'
@@ -919,7 +940,7 @@ def get_card(sign_server, uid, sid, utdid, deviceId, cookie_str, accountId, live
 
 # 获取主播信息
 def accountId_get_data(sign_server, uid, sid, utdid, deviceId, cookie_str, accountId):
-    data = r'{"broadcasterId":"%s","start":"0","limit":"10"}' % accountId
+    data = r'{"broadcasterId":"%s","start":"0","limit":"10","isAsy":"1","isAsyn":"1"}' % accountId
     v = "1.0"
     api = "mtop.mediaplatform.anchor.info"
     pageName = ""
@@ -1139,13 +1160,13 @@ def search_appshop(sign_server, uid, sid, utdid, deviceId, cookie_str):
 
 # 首页类目搜索
 def search_Categorynew(sign_server, uid, sid, utdid, deviceId, cookie_str):
-    nowtime = int(time.time()) * 1000
-    data = r'{"LBS":"{\"SG_TMCS_1H_DS\":\"{\\\"stores\\\":[]}\",\"SG_TMCS_FRESH_MARKET\":\"{\\\"stores\\\":[]}\",\"TB\":\"{\\\"stores\\\":[]}\",\"TMALL_MARKET_B2C\":\"{}\",\"TMALL_MARKET_O2O\":\"{}\"}","active_bd":"1","apptimestamp":"1595320983","areaCode":"CN","brand":"OnePlus","canP4pVideoPlay":"true","countryNum":"156","device":"OnePlus 5T","editionCode":"CN","from":"Categorynew","homePageVersion":"v64","imei":"866550396953177","imsi":"39897OnePlu4943","info":"wifi","isBeta":"false","n":"10","network":"wifi","page":"1","pvFeature":"603864237359;619103360407;588719191859;605699905543;596000814831","q":"方便面","rainbow":"12885,14325,14394,13978,14239,14478,14154","style":"list","sversion":"9.8","tab":"shop","ttid":"231200@taobao_android_9.9.1","utd_id":"XwlB91CAzcADAAztOtJh7u/t","vm":"nw"}'
+    data = r'{"_xDisableNX":"YES","active_bd":"1","ad_type":"1.0","apptimestamp":"1598935065","areaCode":"CN","brand":"360","canP4pVideoPlay":"true","categoryp":"121396029,121476023,213202,50466023","channelSrp":"Categorynew","countryNum":"156","device":"N7 Pro","editionCode":"CN","end_price":"10","from":"Categorynew","info":"wifi","n":"20","needTabs":"true","network":"wifi","page":"1","q":"洗发","query_expo":"洗发","sort":"_sale","start_price":"0","style":"list","sversion":"10.0","ttid":"1552981757354@taobao_android_9.11.0","utd_id":"Xz4kYRos5H4DAKkeoL+6HwYQ","vm":"nw"} '
+
     v = "1.0"
     api = "mtop.taobao.wsearch.appsearch"
     pageName = ""
     pageId = ""
-    call_gw_api(sign_server, api, v, data, uid=uid, utdid=utdid, deviceId=deviceId, pageName=pageName, pageId=pageId,
+    call_gw_api(sign_server, api, v, data, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName, pageId=pageId,
                 Cookie=cookie_str, use_cookie=False, method='GET')
 
 
@@ -1214,6 +1235,50 @@ def dynamicmsg(sign_server, uid, sid, utdid, deviceId, cookie_str):
     pageName = ""
     pageId = ""
     call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
+                pageId=pageId, Cookie=cookie_str, use_cookie=False, method='GET')
+
+
+# 淘宝联盟分享生成转链、淘口令
+def tblm_shareinfo(sign_server, uid, sid, utdid, deviceId, cookie_str):
+    data = r'{"extendParam":"{\"scm\":\"20140618.1.01010001.s101c6\",\"spm\":\"a21wq.9116673.nanzhuang.pageNum0_1\"}","url":"https:\/\/s.click.taobao.com\/t?e=m%3D2%26s%3DoVBNRQrcyCBw4vFB6t2Z2ueEDrYVVa64K7Vc7tFgwiGx5e2f4Vr4dVSDnQfaQgrXtTN3K9waqqiC31e3uwOSoHtW%2B0OGgR2yFScAXQ3w5JqBzc75rkjDl0uJjpkYJl%2BOUc7LIBrQteNuup328eOkkRzsxLoDW197xgxdTc00KD8%3D&scm=1007.15023.81719.0&pvid=3f289f2f-0245-4604-9c44-7c0f9fcaa9c6&app_pvid=59590_11.88.160.145_564_1598947910530&ptl=floorId%3A23264&originalFloorId%3A23264&pvid%3A3f289f2f-0245-4604-9c44-7c0f9fcaa9c6&app_pvid%3A59590_11.88.160.145_564_1598947910530&union_lens=lensId%3AAPP%401598947910%400b58a091_fb21_17448b8e3ca_2d61%40023tNkfHc23neMv62jg5u34d%3Brecoveryid%3AXz4kYRos5H4DAKkeoL.6HwYQ_1598947461739_1793609053_21549244%3Bprepvid%3AXz4kYRos5H4DAKkeoL.6HwYQ_1598951072900_946692998_21549244&spm=a21wq.9116673.nanzhuang.pageNum0_1"}'
+    v = "2.0"
+    api = "mtop.alimama.moon.provider.shareinfo.get"
+    pageName = ""
+    pageId = ""
+    call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
+                pageId=pageId, Cookie=cookie_str, use_cookie=False, method='GET')
+
+
+# 刷微淘短视频
+def contentservicenewv2(sign_server, uid, sid, utdid, deviceId, cookie_str):
+    data = r'{"contentId":"277443516573","source":"preview","type":"h5","params":"","business_spm":"","track_params":""}'
+    v = "1.0"
+    api = "mtop.taobao.beehive.detail.contentservicenewv2"
+    pageName = ""
+    pageId = ""
+    call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
+                pageId=pageId, Cookie=cookie_str, use_cookie=False, method='GET')
+
+
+# 商品加入购物车
+def addbag(sign_server, uid, sid, utdid, deviceId, cookie_str):
+    data = r'{"cartFrom":"taobao_client","detail_v":"3.1.8","exParams":"{\"areaId\":\"350211\",\"divisionId\":\"350211\",\"serviceId\":\"\"}","itemId":"615341294245","quantity":"1","skuId":"4550532931433"}'
+    v = "3.1"
+    api = "mtop.trade.addbag"
+    pageName = ""
+    pageId = ""
+    call_gw_api(sign_server, api, v, data, uid=uid, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
+                pageId=pageId, Cookie=cookie_str, use_cookie=True, method='GET')
+
+
+# 购物车商品列表
+def bag(sign_server, uid, sid, utdid, deviceId, cookie_str):
+    data = r'{"cartFrom":"taobao_client","exParams":"{\"globalSell\":\"1\",\"mergeCombo\":\"true\",\"shopIdInfoStr\":{\"SG_TMCS_1H_DS\":\"{\\\"stores\\\":[]}\",\"SG_TMCS_FRESH_MARKET\":\"{\\\"stores\\\":[]}\",\"TB\":\"{\\\"stores\\\":[]}\",\"TMALL_MARKET_B2C\":\"{}\",\"TMALL_MARKET_O2O\":\"{}\"},\"version\":\"1.1.1\"}","extStatus":"0","isPage":"true","netType":"1"}'
+    v = "5.0"
+    api = "mtop.trade.query.bag"
+    pageName = ""
+    pageId = ""
+    call_gw_api(sign_server, api, v, data, sid=sid, utdid=utdid, deviceId=deviceId, pageName=pageName,
                 pageId=pageId, Cookie=cookie_str, use_cookie=False, method='GET')
 
 
@@ -1443,19 +1508,239 @@ if __name__ == '__main__':
     # sign_server = "http://119.45.8.57:6778/xsign"
     # sign_server = "http://192.168.2.225:6780/xsign"
     # sign_server = "http://test3.cvc.cx/xsign"
-    # uc_server = "http://106.53.51.241:2710/queryUser"
-    uc_server = "http://192.168.79.60:2778/queryUser"
+    uc_server = "http://106.53.51.241:2710/queryUser"
+    # uc_server = "http://192.168.2.225:2778/queryUser"
+    # uc_server = "http://106.53.51.241:2759/queryUser"
     user = get_curr_user(uc_server)
     print("==========================================")
     print(user)
+    #
     uid = user['result']['uid']
     sid = user['result']['sid']
-    # timestamp = int(time.time() * 1000)
+    # sid = "1493e1841c6e7f6628ea0bf423c85d3e"
+    # uid = "1006665907"
+    # utdid = user['result']['utdid']
+    # deviceId = user['result']['deviceId']
     #
-    # utdid = 'XsedXr/tux4DAJO0f4LI5rtp'
-    # deviceId = 'AuuhpePts38Ge8uc6EHhX1ERxa8vGUK7CPGVYDrXFuj0'
-    # # get_sign_dic(sign_server, payload={'username': 'dayin'})
+    # print('uid:' + uid)
+    # print('sid:' + sid)
+    # print('utdid:' + utdid)
+    # print('deviceId:' + deviceId)
+    #
+    # live_searchv3(sign_server, "户外彪客", uid, sid, utdid, deviceId)
     # cookie_str = ''
-    # topic = "99b76cdf-d7b2-4aa8-9b25-27793d1af180"
+    timestamp = int(time.time() * 1000)
+    # uid='198219592'
+    utdid = 'XsedXr/tux4DAJO0f4LI5rtp'
+    deviceId = 'AuuhpePts38Ge8uc6EHhX1ERxa8vGUK7CPGVYDrXFuj0'
+    # utdid = user['result']['utdid']
+    # deviceId = user['result']['deviceId']
+    # print("------------------- --------")
+    # print(utdid)
+    # print("-------------------------")
+    # deviceId = 'AprSoaZCDG9Gmo4eXKiHQY1aRaI1Dt5_2BNVkD8PIvJy'
+    # sid='2b3a944c32e7243d502436c872f638f5'
+    cookie_str = 'cna=FhPFFxO2ZTkCAQ6YNdqFHzcj; tfstk=cGshBANczH8LTsYGlktChBHdtSqAZwkeTBRdbGv5SOZhXZsNilgZyiMZoIygj41..; l=eBNkmA-lOUk03FLGBOfwlurza77OSCOAguPzaNbMiOCP9WCB5j4PWZPrN-T6C3GRh6bJR3Ssv1eHBeYBV3K-nxvTEMCAFTMmn; enc=HpN9elaGN7iI%2FPyZ1ygn6mR%2BgrSHp8fsdjstNJfx4kKUcy3QWkMueBX67PFaj%2F%2BjIWdR4f%2FN%2BDhl6pBmbyhZsQ%3D%3D; unb=1006665907; sn=; uc3=id2=UoH%2FYEIG%2BqCw6A%3D%3D&vt3=F8dCufXF3Y7DQFW0w90%3D&lg2=UtASsssmOIJ0bQ%3D%3D&nk2=Czge4t0rRi6t; uc1=cookie15=Vq8l%2BKCLz3%2F65A%3D%3D&cookie21=UtASsssmfuQgeppz&existShop=false&cookie14=UoTV5OMT9o7nKw%3D%3D; csg=40945b7b; lgc=hu3357055; t=38b2e8debffaa1411761993ee99929ab; cookie17=UoH%2FYEIG%2BqCw6A%3D%3D; dnk=hu3357055; skt=be34f1d2bda88b17; munb=1006665907; cookie2=28f529abe889779034ad9bc252a08a8d; uc4=nk4=0%40CX9bG7OJJuf%2FPatUq%2BpWNxMGBy0%3D&id4=0%40UOngTlrD4TeWwzFKcZ5kEGytGuDk; tracknick=hu3357055; _cc_=VT5L2FSpdA%3D%3D; ti=; sg=574; _l_g_=Ug%3D%3D; _nk_=hu3357055; cookie1=VynA1azbI8yn%2Fq0fD55CqVIPVfa%2Fm7Gp%2Bjy07L5wEZs%3D; _tb_token_=38518f143957f; sgcookie=W100CvZgKCOi4hDOhMCfiST6pu9qai6uN3ec6rPMoqFhnXOFfzYQ27KmqFQSb3RxHFtcBCUfHA7%2BpkbYXHwzm9ooaGZ1tifk1WLWdzwsbcWUw6w%3D; imewweoriw=3HwCHP3qiJOre2P4z1Mz5J8CYTvgb%2BYUsqBo%2FmGMhTo%3D; WAPFDFDTGFG=%2B4cMKKP%2B8PI%2BNCbS3ir5R7XczV0%3D; _w_tb_nick=hu3357055; ockeqeudmj=gfUj9Zk%3D; thw=cn; isg=AtbWfZ67le6zx6E7Vbs_KdoHLI7YdxqxuD4pKUA_wrlUA3adqAdqwTzz6aUQ'
+    topic = "391784e2-d89b-47ef-b435-f5737cebcb14"  # 1
+    # topic = 'aaf6ecc6-2fce-4358-8b55-9b3432639af1'
+    # search_recommend(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # collectionids_get(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # get_detail2(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # get_detail(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # 商品加入购物测
+    sid = '21cc738b5f8ff0d5264b16ebea92d833'
+    uid = '1006665907'
+    # addbag(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    bag(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # batch(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # batch2(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # comment_publish(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    # comment_publish2(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    # test_follow(sign_server, utdid, deviceId, cookie_str, sid)
+    # click_add(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # track_regist(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # change_user(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # video_subscribe(sign_server, utdid, deviceId,sid)
+    # i=1
+    # while True:
+    #
+    #     checksubscription(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    #     print("次数为%s"%i)
+    #     time.sleep(1)
+    #     i += 1
+    # tbNicks = get_tbNick()
+    # for i in tbNicks:
+    #     print(i[0])
+    #     sendmsg_action(sign_server, uid, sid, utdid, deviceId, cookie_str, topic,i[0])
+    # nick_ww = '长颈鹿yxys'
+    accountName = "石力派翡翠1号"
+    # searchdata(sign_server, uid, sid, utdid, deviceId, cookie_str, accountName)
+    # nick_ww = "微笑005002"
+    # sendmsg_action(sign_server, uid, sid, utdid, deviceId, cookie_str,topic,nick_ww)
+    # (sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    # sendmsg_action_buy(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    # accounts = getAccount()
+    # j = 0
+    # for i in accounts:
+    #     #print(i)
+    #     uid = str(i[0])
+    #     ccokies = i[1]
+    #     sid = re.findall("cookie2=(.*);_", ccokies, re.S)[0]
+    #     print(sid)
+    #     sendmsg_action_buy(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    #     j+=1
+    #     time.sleep(8)
+    # addpv(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    result = pullnativemsg(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    baesjiemi(result)
+    # report(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    # query_latest(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    # query_latest2(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    # sendmsg(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # comment_publish(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    # sendmsg2(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    # task_action(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # while True:
+    #     stay_task_action(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    #     print("休息1秒")
+    #     time.sleep(1)
+    # dynamicmsg(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # detail_task_action(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # task_action_gotoDetail(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # getbatchampuserinfoforim(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # entry(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # hecksubscription(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # weitao_add(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # task_action2(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # anniversary_ranklist(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # ranklist_fans(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # follow_detail(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # ack_upload(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # livedetail_messinfo(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    liveId = 276935427707
+    # while True:
+    #     livedetail(sign_server, uid,sid, utdid, deviceId, cookie_str,liveId)
+    # while True:
+    #     livedetail4(sign_server, uid, sid,utdid, deviceId, cookie_str,liveId)
+    # livedetail4(sign_server, uid, sid,utdid, deviceId, cookie_str,liveId)
+    # livedetail_itemlist(sign_server, uid, utdid, deviceId, cookie_str,liveId)
+    accountId = "2671509125"
+    # accountId_get_data(sign_server, uid, sid, utdid, deviceId, cookie_str, accountId)
+    # liveId = "275897456484"
+
+    # while True:
+    #     livedetail_pre(sign_server, uid, utdid, deviceId, cookie_str,liveId)
+    accountId = 383276245
+    # livedetail_pre(sign_server, uid, utdid, deviceId, cookie_str, liveId)
+    # while True:
+    # personal_homepage(sign_server, uid,sid, utdid, deviceId, cookie_str,accountId)
+    # accountId='407363940'
+    # anchor_accountid(sign_server, uid, sid, utdid, deviceId, cookie_str, accountId)
+    # playUrl(sign_server, uid, utdid, deviceId, cookie_str)
+    # while True:
+    #     livedetail4(sign_server, uid, utdid, deviceId, cookie_str)
+    # 主播实时数据
+    # pulltopicstat(sign_server, uid, sid, utdid, deviceId,cookie_str,topic)
+    # getliveinfovobysellerid(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # getdynservice(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # addtrace(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # i = 0
+    # while True:
+    #     pulltopicstat(sign_server, uid, sid, utdid, deviceId,cookie_str,topic)
+    #     i+=1
+    #     print("第%s次"%i)
+    # zhongkongtai_livedata(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    # pv_uv_end(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    # while True:
+    #     time.sleep(1)
+    #     pulltopicstat(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    # web_videolist(sign_server, uid, sid, utdid, deviceId,cookie_str)
+    # getshopliveinfo(sign_server, uid, sid, utdid, deviceId,cookie_str)
+    # j = 10
+    # for i in range(10000):
+    #     publish(sign_server, uid, sid, utdid, deviceId, cookie_str,topic,j)
+    #     #time.sleep(1)
+    j = 10
+    # publish(sign_server, uid, sid, utdid, deviceId, cookie_str,topic,j)
+
+    # amp_sync(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    q = 'fashion美美搭'
+    # # q = '2012space'
+    # live_searchv3(sign_server, q, uid, sid, utdid, deviceId,cookie_str)
+    # tabmenu(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # i=0
+    # while True:
+    #     search_appshop(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    #     i+=1
+    #     print("第%s次"%i)
+    # time.sleep(2)
+    # while True:
+    # search_Categorynew(sign_server, uid, sid, utdid, deviceId, cookie_str)
+
+    # account_list = get_account()
+    # for i in account_list:
+    #     timestamp = time.time()
+    #     print(i)
+    #     shuapv2(sign_server, utdid, deviceId,i[0],i[1],timestamp)
+    #     #print("第%s次"%i)
+    #
+    # account_list = get_topic()
+    # for i in account_list:
+    #     print(i)
+    #     timestamp = time.time()
+    #     for j in range(10):
+    #         shuapv2(sign_server, utdid, deviceId, i[1])
+    #         print("第%s次" %j)
+
+    # shuapv2(sign_server, utdid, deviceId, topic)
+
+    # userData = get_userData()
+    # unsubscribe(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
     # while True:
     #     shuapv2(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    # querypassword_tkl(sign_server, uid,sid, utdid, deviceId, cookie_str)
+    # test_enter(sign_server, utdid, deviceId, cookie_str, sid,uid)
+    # task_action(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # i = 1
+    # while True:
+    #     #unsubscribe(sign_server, uid, sid, utdid, deviceId, cookie_str,topic)
+    #     shuapv2(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    #     #unsubscribe(sign_server, uid, sid, utdid, deviceId, cookie_str, topic)
+    #     i = i + 1
+    #     #time.sleep(0.5)
+    #     print("第%s次" % i)
+
+    # shopid = '34745125'
+    # sellerid = '3294'
+    # get_shop_data(shopid, sellerid,sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # videolist(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # depth(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # while True:
+    # lightlive_videolist(sign_server, uid, sid,  utdid, deviceId,cookie_str)
+
+    accountId = 2671509125
+    liveId = 277815270463
+    # get_card(sign_server, uid, sid, utdid, deviceId, cookie_str,accountId,liveId)
+
+    # get_tkl(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # querypassword_tkl(sign_server, uid, utdid, deviceId, cookie_str)
+    # nologin(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # check_info(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # app_index_class(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # search_highway(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # wirelessrecommend(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # live_get_tkl(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # get_live_sold(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    sid = "1262d7b7d947ddf02bf2baa1d27b18ea"
+    uid = "2648620207"
+
+    # tblm_shareinfo(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # while True:
+    #     contentservicenewv2(sign_server, uid, sid, utdid, deviceId, cookie_str)
+    # accountName = get_accountName()
+    # total = len(accountName)
+    # b= 1
+    # a = int(total/b)
+    # n = a+1
+    # list_pingjun = [accountName[i:i + n] for i in range(0, total, n)]
+    # p

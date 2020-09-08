@@ -1,13 +1,16 @@
 import json
 from root_api import gw_api
+import time
+from get_taobao_timestamp import get_timestamp
 
 
 def brush_pv_root(topic):
     while 1:
+        t = get_timestamp()
         data = json.dumps(
-            {'topic': topic, 'role': '0',
-             'namespace': '1',
-             'sdkVersion': '0.3.0'})
+            {"appKey": "21646297", "ext": t, "from": "ubee", "id": "2990638377", "namespace": 1,
+             "role": 3, "sdkVersion": "0.3.0", "tag": "ubee", "timestamp": t,
+             "topic": topic, "utdId": "X03fKfpe1UYDAPhdFrObFmvR"})
 
         v = "1.0"
         api = "mtop.taobao.powermsg.msg.subscribe"
@@ -17,7 +20,7 @@ def brush_pv_root(topic):
 
 
 def main():
-    topic = "99b76cdf-d7b2-4aa8-9b25-27793d1af180"
+    topic = "f81ea59d-d559-430d-8e93-6b793749aef3"
     brush_pv_root(topic)
 
 

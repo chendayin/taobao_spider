@@ -8,13 +8,15 @@ from urllib3.exceptions import InsecureRequestWarning
 import time
 
 APP_KEY = "21646297"
-TT_ID = '700226%40taobao_android_9.3.0'
-APP_VER = "9.3.0"
+TT_ID = '227200%40taobao_android_9.12.0'
+APP_VER = "9.12.0"
 LAT = ""
 LNG = ""
-UTD_ID = 'XsedXr/tux4DAJO0f4LI5rtp'
-DEVICE_ID = 'AuuhpePts38Ge8uc6EHhX1ERxa8vGUK7CPGVYDrXFuj0'
+UTD_ID = 'X03fKfpe1UYDAPhdFrObFmvR'
+DEVICE_ID = 'AoPbqzQ7rFhQeS0-m3_BCGvdwz6-7zWFTdENB99iwyEc'
 SIGN_SERVER = 'http://192.168.2.225:6780/xsign'
+
+UC_SERVER = "http://192.168.79.60:2778/queryUser"
 
 
 def get_cur_time(length: int = 0):
@@ -27,6 +29,18 @@ def get_sign_dic(sign_server, payload: dict):
     }
     res = requests.post(sign_server, data=json.dumps(payload), headers=headers)
     return res.json()
+
+
+def get_curr_user(uc_server):
+    headers = {
+        "content-type": "application/json;charset=utf-8"
+    }
+    res = requests.post(uc_server, data=json.dumps('{}'), headers=headers)
+    res_content = res.content
+    user_dic = {}
+    if res.status_code == requests.codes.ok:
+        user_dic = json.loads(res_content.decode())
+    return user_dic
 
 
 def get_sign(api, version, data: str, t, sign_server, page_id='', page_name='', uid='', sid='',
@@ -96,9 +110,8 @@ def gw_api(api, version, data: str, host, page_id='', page_name='', uid='', sid=
         headers["x-sid"] = sid
     if use_cookie:
         headers["Cookie"] = cookie
-    req_url = (req_url + "?{0}").format(body)
     if method.upper() == 'GET':
-
+        req_url = (req_url + "?{0}").format(body)
         r = requests.get(req_url, headers=headers, verify=False)
         content = r.text
     else:
@@ -108,13 +121,15 @@ def gw_api(api, version, data: str, host, page_id='', page_name='', uid='', sid=
 
 
 if __name__ == '__main__':
-    t1 = get_cur_time(3)
-    t2 = t1 + 40
-    t3 = t1 + 50
-    # 1598940989685
-    # 1598940989637
-    # 1598940989671
-
-    data = r'{}'
-    d = gw_api(api="mtop.common.gettimestamp", version="*", data=data,
-               host="guide-acs.m.taobao.com")
+    # user = get_curr_user(UC_SERVER)
+    # uid = user['result']['uid']
+    # sid = user['result']['sid']
+    data = r'{"accountType":"3","dataTypeIdMap":"{\"imCmd\":1,\"imMsg\":38,\"imGroupEvent\":56,\"tao_friend\":3,\"imba\":1318,\"imbaCmd\":0,\"imba_relation\":15}","fetchSize":"30","firstReq":"false","namespace":"0","readModeSyncMap":"{}","sdkVersion":"1"}'
+    version = "1.0"
+    api = "mtop.com.taobao.wireless.amp.newsync"
+    host = "guide-acs.m.taobao.com"
+    sid = "12e61dab2cb53f14a332e98f82b4315d"
+    uid = "2990638377"
+    d = gw_api(api=api, version=version, data=data,
+               host=host, sid=sid, uid=uid, method="POST")
+    print(d)
