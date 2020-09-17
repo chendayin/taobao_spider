@@ -2,7 +2,7 @@ from urllib.parse import quote_plus
 
 import requests
 import json
-
+from utlis import get_proxy
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 import time
@@ -14,9 +14,9 @@ LAT = ""
 LNG = ""
 UTD_ID = 'X03fKfpe1UYDAPhdFrObFmvR'
 DEVICE_ID = 'AoPbqzQ7rFhQeS0-m3_BCGvdwz6-7zWFTdENB99iwyEc'
-SIGN_SERVER = 'http://192.168.2.225:6780/xsign'
+SIGN_SERVER = 'http://106.53.51.241:6713/xsign'
 
-UC_SERVER = "http://192.168.79.60:2778/queryUser"
+UC_SERVER = "http://192.168.79.60:2779/queryUser"
 
 
 def get_cur_time(length: int = 0):
@@ -71,6 +71,7 @@ def gw_api(api, version, data: str, host, page_id='', page_name='', uid='', sid=
     t = get_cur_time()
     sign_dict = get_sign(api, version, data, t, SIGN_SERVER, page_id, page_name, uid, sid, features)
     body = "data=" + quote_plus(data)
+
     req_url = "https://{}/gw/{}/{}/".format(host, api, version)
     headers = {
         "x-m-biz-live-bizcode": "TAOBAO",
@@ -124,11 +125,11 @@ if __name__ == '__main__':
     # user = get_curr_user(UC_SERVER)
     # uid = user['result']['uid']
     # sid = user['result']['sid']
-    data = r'{"accountType":"3","dataTypeIdMap":"{\"imCmd\":1,\"imMsg\":38,\"imGroupEvent\":56,\"tao_friend\":3,\"imba\":1318,\"imbaCmd\":0,\"imba_relation\":15}","fetchSize":"30","firstReq":"false","namespace":"0","readModeSyncMap":"{}","sdkVersion":"1"}'
-    version = "1.0"
-    api = "mtop.com.taobao.wireless.amp.newsync"
-    host = "guide-acs.m.taobao.com"
-    sid = "12e61dab2cb53f14a332e98f82b4315d"
+    data = r'{"itemId":"624387840009","skuId":"4426137557865"}'
+    version = "4.0"
+    api = "mtop.trade.order.build"
+    host = "trade-acs.m.taobao.com"
+    sid = "17ce4a2544ddf12743a73f6574b47fac"
     uid = "2990638377"
     d = gw_api(api=api, version=version, data=data,
                host=host, sid=sid, uid=uid, method="POST")

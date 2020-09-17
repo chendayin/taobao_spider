@@ -1,6 +1,5 @@
 import smtplib
 from email.mime.text import MIMEText
-import redis
 
 
 def send_email(content, subject):
