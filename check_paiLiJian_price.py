@@ -2,7 +2,7 @@ from get_item_real_price import get_price
 from Mysql_pool_utils import MyPoolDB
 from utlis import *
 
-DB = MyPoolDB(host="192.168.10.76", user="root", password="5560203@wstSpider!", db_base="zbzs_cj_basic")
+DB = MyPoolDB(host="192.168.10.76", user="", password="", db_base="zbzs_cj_basic")
 
 
 def get_pai_li():
